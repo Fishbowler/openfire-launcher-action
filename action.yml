@@ -1,0 +1,77 @@
+name: 'Launch Openfire'
+description: 'Downloads and launches Openfire for use in a workflow'
+inputs:
+  version:
+    description: 'The version of Openfire to download and launch'
+    required: false
+    default: '4.9.0'
+  daily:
+    description: 'Whether to use the daily build of Openfire'
+    required: false
+    default: 'false'
+  config:
+    description: 'The configuration to use for Openfire (defaults to demoboot)'
+    required: false
+    default: ''
+  
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-java@v4
+      with:
+        java-version: 11
+        distribution: zulu
+
+    - name: Set JAVA_HOME to use Java 11
+      run: echo "JAVA_HOME=$(echo $JAVA_HOME_11_X64)" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Set variables
+      id: variables
+      run: |
+        OPENFIRE_VERSION=${{ inputs.version }}
+        echo "OPENFIRE_VERSION=${OPENFIRE_VERSION}" >> $GITHUB_OUTPUT
+        echo "OPENFIRE_VERSION_UNDERSCORE=${OPENFIRE_VERSION//./_}" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - uses: dsaltares/fetch-gh-release-asset@1.1.1
+      if: ${{ inputs.daily == 'false'}}
+      with:
+        repo: 'IgniteRealtime/Openfire'
+        version: 'tags/v${{ steps.variables.outputs.OPENFIRE_VERSION }}'
+        file: 'openfire_${{ steps.variables.outputs.OPENFIRE_VERSION_UNDERSCORE }}.tar.gz'
+
+    - name: Rename downloaded artifact
+      if: ${{ inputs.daily == 'false'}}
+      run: mv openfire_*.tar.gz openfire.tar.gz
+      shell: bash
+
+    - name: Download a recent Openfire daily build
+      if: ${{ inputs.daily == 'true'}}
+      run: |
+        # This tries to find the most recent daily build, going back 30 days if none are available.
+        #Note that the cache above will cause whatever build that's download to be considered 'todays' build.
+        for i in $(seq 0 30); do
+          STAMP=`date --date="$i day ago" +%F`;
+          echo "Attempting to download Openfire build for $STAMP"
+          curl --fail -L "https://download.igniterealtime.org/openfire/dailybuilds/openfire_$STAMP.tar.gz" -o openfire.tar.gz && break
+        done
+      shell: bash
+
+    - name: Extract Openfire
+      run: |
+        tar -xzf openfire.tar.gz
+      shell: bash
+
+    - name: Copy configuration
+      if: ${{ inputs.config != '' }}
+      run: |
+        cp ${{ inputs.config }} openfire/conf/openfire-demoboot.xml
+      shell: bash
+    
+    - run: ./startCIServer.sh -i 127.0.0.1 -h example.org -b ./openfire
+      shell: bash
+
+
+
