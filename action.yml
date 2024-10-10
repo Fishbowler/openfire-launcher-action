@@ -35,7 +35,7 @@ runs:
         echo "OPENFIRE_VERSION_UNDERSCORE=${OPENFIRE_VERSION//./_}" >> $GITHUB_OUTPUT
       shell: bash
 
-    - uses: dsaltares/fetch-gh-release-asset@1.1.1
+    - uses: dsaltares/fetch-gh-release-asset@1.1.2
       if: ${{ inputs.daily == 'false'}}
       with:
         repo: 'IgniteRealtime/Openfire'
