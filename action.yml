@@ -1,5 +1,8 @@
 name: 'Launch Openfire'
 description: 'Downloads and launches Openfire for use in a workflow'
+branding:
+  color: 'orange'
+  icon: 'server'
 inputs:
   version:
     description: 'The version of Openfire to download and launch'
