@@ -1,4 +1,4 @@
-# Openfire Launcher action
+# Launch Openfire action
 
 An action for launching [Openfire](https://github.com/igniterealtime/Openfire), an XMPP server implementation, in the context of a Github Action workflow. It's not intended for anything production-facing, or even really user-facing. It's useful for CI-based short-lived actions that need an XMPP server.
 
@@ -12,7 +12,7 @@ example:
 
 ```yaml
       - name: Run Openfire
-        uses: igniterealtime/openfire-launcher
+        uses: igniterealtime/launch-openfire-action
         with:
           version: 4.9.0
 ```
@@ -25,7 +25,7 @@ example:
 
 ```yaml
       - name: Run Openfire
-        uses: igniterealtime/openfire-launcher
+        uses: igniterealtime/launch-openfire-action
         with:
           daily: 'true'
 ```
@@ -40,7 +40,7 @@ example:
 
 ```yaml
       - name: Run Openfire
-        uses: igniterealtime/openfire-launcher
+        uses: igniterealtime/launch-openfire-action
         with:
           config: ./my-config.xml
 ```
