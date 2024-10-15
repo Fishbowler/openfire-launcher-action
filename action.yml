@@ -94,7 +94,7 @@ runs:
       env:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
     
-    - run: ./startCIServer.sh -i 127.0.0.1 -h example.org -b ./openfire
+    - run: startCIServer.sh -i 127.0.0.1 -h example.org -b ./openfire
       shell: bash
 
 
