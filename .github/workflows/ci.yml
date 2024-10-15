@@ -16,7 +16,8 @@ jobs:
         with:
           version: '4.9.0'
             
-      - run: |
+      - name: Check Admin Console
+        run: |
           set -e
           echo "Checking Openfire Admin Console"
           OPENFIRE_CONSOLE=$(curl -s -o /dev/null -I -w "%{http_code}^%header{Location}" http://127.0.0.1:9090/index.jsp)
@@ -44,7 +45,8 @@ jobs:
         with:
           version: '4.8.3'
             
-      - run: |
+      - name: Check Admin Console
+        run: |
           set -e
           echo "Checking Openfire Admin Console"
           OPENFIRE_CONSOLE=$(curl -s -o /dev/null -I -w "%{http_code}^%header{Location}" http://127.0.0.1:9090/index.jsp)
@@ -72,7 +74,8 @@ jobs:
         with:
           daily: 'true'
             
-      - run: |
+      - name: Check Admin Console
+        run: |
           set -e
           echo "Checking Openfire Admin Console"
           OPENFIRE_CONSOLE=$(curl -s -o /dev/null -I -w "%{http_code}^%header{Location}" http://127.0.0.1:9090/index.jsp)
@@ -106,7 +109,8 @@ jobs:
           version: '4.9.0'
           plugin: ./xmldebugger.jar
             
-      - run: |
+      - name: Check Admin Console
+        run: |
           set -e
           echo "Checking Openfire Admin Console"
           OPENFIRE_CONSOLE=$(curl -s -o /dev/null -I -w "%{http_code}^%header{Location}" http://127.0.0.1:9090/index.jsp)
