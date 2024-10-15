@@ -13,7 +13,11 @@ inputs:
     required: false
     default: 'false'
   config:
-    description: 'The configuration to use for Openfire (defaults to demoboot)'
+    description: 'The configuration to use for Openfire (default: demoboot)'
+    required: false
+    default: ''
+  plugin:
+    description: 'Additional plugin to install in Openfire (default: none)'
     required: false
     default: ''
   
@@ -71,6 +75,17 @@ runs:
       if: ${{ inputs.config != '' }}
       run: |
         cp ${{ inputs.config }} openfire/conf/openfire-demoboot.xml
+      shell: bash
+
+    - name: Copy plugin
+      if: ${{ inputs.plugin != '' }}
+      run: |
+        PLUGINPATH=${{ inputs.plugin }}
+        if [[ "${PLUGINPATH##*.}" == "jar" ]]; then
+          cp "$PLUGINPATH" openfire/plugins/
+        else
+          echo "Plugin must be a jar file"
+        fi
       shell: bash
     
     - run: ./startCIServer.sh -i 127.0.0.1 -h example.org -b ./openfire
