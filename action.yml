@@ -88,6 +88,12 @@ runs:
         fi
       shell: bash
     
+    - name: Set GitHub Path for script running
+      run: echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+      shell: bash
+      env:
+        GITHUB_ACTION_PATH: ${{ github.action_path }}
+    
     - run: ./startCIServer.sh -i 127.0.0.1 -h example.org -b ./openfire
       shell: bash
 
